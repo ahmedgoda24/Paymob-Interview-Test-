@@ -16,8 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+# from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('task.urls')),
+    path('', include('task1.urls')),
+
 ]
+# Only include debug toolbar URLs if not in testing mode
+# from task.apps import TaskConfig
+# app_name = TaskConfig.name
+# if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+#     import debug_toolbar
+#     urlpatterns = [
+#         path('__debug__/', include(debug_toolbar.urls)),
+#     ] + urlpatterns
+
+if not settings.TESTING:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+    urlpatterns = [
+        *urlpatterns,
+    ] + debug_toolbar_urls()
